@@ -20,12 +20,38 @@ type Person struct {
 	Age  int
 }
 
+type Customer struct {
+	Name   string
+	Email  string
+}
+
+
+
 type Order struct {
 	id        int
 	amount    float64
 	status    string
 	createdAt time.Time // nanosecond precision timestamp
+	Customer
 }
+// Rule 1 — Promotion only works for embedded structs
+// Must be:
+// Customer
+// NOT:
+// Customer Customer
+
+// Rule 2 — Conflict causes compile error
+// If:
+// type Order struct {
+//     Name string
+//     Customer
+// }
+// Now:
+// order.Name // ❌ ambiguous
+// Compiler error:
+// ambiguous selector order.Name
+// Then you must:
+// order.Customer.Name
 
 func newOrder(id int, amount float64, status string, createdAt time.Time) *Order {
 	myOrder := Order{
@@ -142,6 +168,30 @@ func main() {
 		item_type string
 	} { "Laptop", "Electronics" }
 	fmt.Printf("Items (anonymous struct): %+v\n", items)
+	customer1 := Customer{Name: "Eve", Email: "eve@example.com"};
+	orderWithCustomer := Order{
+		id:        4,
+		amount:    500.00,
+		status:    "Pending",
+		createdAt: time.Now(),
+		Customer: customer1,
+	}
+	fmt.Printf("Order with customer: %+v\n", orderWithCustomer)
+	// OR we can directly initialize the embedded struct fields without creating a separate variable for the embedded struct
+	orderWithCustomer2 := Order{
+		id:        5,
+		amount:    750.00,
+		status:    "Pending",
+		createdAt: time.Now(),
+		Customer: Customer{Name: "Frank", Email: "frank@example.com"},
+	}
+	fmt.Printf("Order with customer2: %+v\n", orderWithCustomer2)
+	fmt.Printf("Order with customer2 (accessing embedded struct fields directly): ID: %d, Amount: %.2f, Status: %s, CreatedAt: %s, Customer Name: %s, Customer Email: %s\n",
+		orderWithCustomer2.id, orderWithCustomer2.amount, orderWithCustomer2.status, orderWithCustomer2.createdAt.Format(time.RFC3339), orderWithCustomer2.Name, orderWithCustomer2.Customer.Email)
+	fmt.Printf("Order2 Customer name: %s, Customer name %s, Customer email: %s\n", orderWithCustomer.Customer.Name, orderWithCustomer.Name, orderWithCustomer.Customer.Email)
+	// "Why can you access order.Name directly?"
+	// Because Customer is embedded (anonymous field). Go promotes the embedded struct’s fields and methods to the parent struct, 
+	// allowing direct access without specifying Customer.
 }
 
 // Why can’t methods be declared inside functions?
