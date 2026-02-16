@@ -2,11 +2,19 @@ package main
 
 import (
 	"fmt"
-	"time"
+	// "time"
+	"sync"
 )
 
-func task(id int) {
-	fmt.Println("Task", id, "is running");
+// func task(id int) {
+// 	fmt.Println("Task", id, "is running");
+// }
+
+func task(id int, wg *sync.WaitGroup) {
+	// defer is used to ensure that wg.Done() is called when the function finishes, even if there is an error or panic
+	// this is like a cleanup function that will be called when the function returns
+	defer wg.Done() // signal that this goroutine is done when it finishes
+	fmt.Println("Task", id, "is running")
 }
 
 func main() {
@@ -43,16 +51,33 @@ func main() {
 	// 	go task(i)
 	// }
 
-	// using anonymous function to create a goroutine
-	for i:=1;i<=5;i++ {
-		go func(i int){
-			fmt.Println("Hello from anonymous goroutine", i)
-			// here we are using the loop variable i inside the anonymous function, but since the goroutine runs asynchronously, 
-			// by the time the goroutine executes, the value of i will have changed to 6, so all goroutines will print "Hello from anonymous goroutine 6"
-			// to fix this issue, we can pass the loop variable as an argument to the anonymous function
-		}(i)
-	}
+	// // using anonymous function to create a goroutine
+	// for i:=1;i<=5;i++ {
+	// 	go func(i int){
+	// 		fmt.Println("Hello from anonymous goroutine", i)
+	// 		// here we are using the loop variable i inside the anonymous function, but since the goroutine runs asynchronously, 
+	// 		// by the time the goroutine executes, the value of i will have changed to 6, so all goroutines will print "Hello from anonymous goroutine 6"
+	// 		// to fix this issue, we can pass the loop variable as an argument to the anonymous function
+	// 	}(i)
+	// }
+	// time.Sleep(time.Second * 2) // wait for 2 seconds to allow all goroutines to finish	
 
-	time.Sleep(time.Second * 2) // wait for 2 seconds to allow all goroutines to finish	
- 
+	// wait group example
+	var wg sync.WaitGroup
+	for i := 1; i <=5; i++ {
+		wg.Add(1) // increment the wait group counter for each goroutine
+		go task(i, &wg) // pass the wait group pointer to the goroutine
+	}
+	wg.Wait() // wait for all goroutines to finish
+
+	// only three things to remember about goroutines:
+	// 1. they are lightweight threads of execution managed by the Go runtime
+	// 2. they can be created using the go keyword followed by a function call
+	// 3. we can use sync.WaitGroup to wait for multiple goroutines to finish
+
+	// important to note that goroutines are not the same as OS threads, they are managed by the Go runtime and can be scheduled on multiple OS threads, 
+	// but they are not the same as OS threads. Goroutines are much lighter than OS threads and can be created in large numbers without consuming a lot of resources.
+	// add wait group
+	// done when the function finishes
+	// wait for all goroutines to finish
 }
