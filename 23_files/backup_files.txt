@@ -142,12 +142,12 @@ func main() {
 	fmt.Println("Written to new file.")
 
 
-	// // if we want to delete any file
-	// err_d := os.Remove("23_files/backup_files.txt")
-	// if err_d != nil {
-	// 	panic(err_d)
-	// }
+	// if we want to delete any file
+	err_d := os.Remove("23_files/backup_files.txt")
+	if err_d != nil {
+		panic(err_d)
+	}
 
-	// fmt.Println("File deleted successfully.")
+	fmt.Println("File deleted successfully.")
 
 }
