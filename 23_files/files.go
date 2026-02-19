@@ -108,6 +108,9 @@ func main() {
 
 	// read and write using streaming 
 	sourceFile, err := os.Open("23_files/files.go");
+	if err != nil {
+		panic(err)
+	}
 	defer sourceFile.Close()
 
 
