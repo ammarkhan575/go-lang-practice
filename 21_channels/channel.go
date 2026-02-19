@@ -304,3 +304,26 @@ func main() {
 // Explanation:
 // Each defer captures the current value of i at the time it is called.
 // When the loop finishes, the deferred calls are executed in reverse order, printing 2, then 1, then 0.
+
+
+// 👉 defer + panic safety
+// func main() {
+//     defer fmt.Println("cleanup")
+//     panic("error")
+// }
+// Output:
+// cleanup
+// panic: error
+// Explanation:
+// Even though a panic occurs, the deferred function still runs, ensuring that "cleanup" is printed before the program crashes.
+//  👉 Great for:
+// unlock mutex
+// close connections
+// rollback transactions
+
+// 👉 Internal idea (how Go implements)
+// Conceptually:
+// defer stack per function
+// push calls
+// pop on return
+// execute
