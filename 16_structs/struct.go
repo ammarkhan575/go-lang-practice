@@ -88,7 +88,7 @@ func main() {
 	// a struct is a composite data type that groups together variables under a single name
 	// we can define a struct type using the `type` keyword followed by the name of the struct and the fields it contains
 
-	// we can create an instance of a struct using a struct literal
+	// we can create an instance of a struct using a 👉 struct literal 👈 
 	person1 := Person{Name: "Alice", Age: 30}
 	fmt.Println("Person 1:", person1)
 
