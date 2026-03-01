@@ -61,3 +61,42 @@ func main() {
 
 
 }
+
+// basic data types :- int, float64, string, bool
+// composite data types :- arrays, slices, maps, structs
+// referece data type :- arrays, slices, maps, structs, pointers, channels, functions
+// interface data type :- interface{} (empty interface can hold any type of value)
+
+// if architecture is 32 bit, then int is 32 bit and if architecture is 64 bit, then int is 64 bit
+
+// byte is an alias for uint8, it can hold values from 0 to 255
+// rune is an alias for int32, it can hold Unicode code pointsF
+
+// if we want to print the type of a variable, we can use the %T verb in fmt.Printf
+// fmt.Printf("Type of name: %T\n", name) // Type of name: string
+// if we want to print the value of a variable, we can use the %v verb in fmt.Printf
+// fmt.Printf("Value of name: %v\n", name) // Value of name: Ammar
+// if we want to print both the type and value of a variable, we can use the %#v verb in fmt.Printf
+// fmt.Printf("Type and value of name: %#v\n", name) // Type and value of name: "Ammar"
+// if we want to print the value of a variable in a more human-readable format, we can use the %q verb in fmt.Printf
+// fmt.Printf("Value of name in quotes: %q\n", name) // Value of name in quotes: "Ammar"
+// if we want to print the value of a variable in hexadecimal format, we can use the %x verb in fmt.Printf
+// fmt.Printf("Value of name in hexadecimal: %x\n", name) // Value of name in hexadecimal: 416d6d6172
+// if we want to print the value of a variable in binary format, we can use the %b verb in fmt.Printf
+// fmt.Printf("Value of name in binary: %b\n", name) // Value of name in binary: 1000001 1101101 1101101 1100001 1110010
+// if we want to print the value of a variable in octal format, we can use the %o verb in fmt.Printf
+// fmt.Printf("Value of name in octal: %o\n", name) // Value of name in octal: 101 155 155 141 162
+// if we want to print the value of a variable in scientific notation, we can use the %e verb in fmt.Printf
+// fmt.Printf("Value of name in scientific notation: %e\n", name) // Value of name in scientific notation: 4.16e+00
+// if we want to print the value of a variable in a more human-readable format, we can use the %s verb in fmt.Printf
+// fmt.Printf("Value of name as a string: %s\n", name) // Value of name as a string: Ammar
+// if we want to print the value of a variable in a more human-readable format, we can use the %f verb in fmt.Printf
+// fmt.Printf("Value of name as a float: %f\n", name) // Value of name as a float: 0.000000
+// if we want to print the value of a variable in a more human-readable format, we can use the %g verb in fmt.Printf
+// fmt.Printf("Value of name as a float in compact form: %g\n", name) // Value of name as a float in compact form: 0
+// if we want to print the value of a variable in a more human-readable format, we can use the %v verb in fmt.Printf
+// fmt.Printf("Value of name in default format: %v\n", name) // Value of name in default format: Ammar
+// if we want to print the value of a variable in a more human-readable format, we can use the %T verb in fmt.Printf
+// fmt.Printf("Type of name: %T\n", name) // Type of name: string
+// if we want to print the value of a variable in a more human-readable format, we can use the %#v verb in fmt.Printf
+// fmt.Printf("Type and value of name: %#v\n", name) // Type and value of name: "Ammar"
