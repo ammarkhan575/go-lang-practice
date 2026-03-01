@@ -115,3 +115,7 @@ func main() {
 	fmt.Println("2D slice (matrix):", matrix)
 	
 }
+
+// every refernce type can be created using the make function, 
+// but we can only use the make function to create slices, maps and channels, 
+// we cannot use it to create arrays, structs, pointers or functions.
