@@ -14,6 +14,16 @@ func greet() {
 	fmt.Println("Hello, welcome to Go programming!")
 }
 
+func swap(x string, y string) (string, string) {
+	return y, x
+}
+
+func splitNumber(sum int) (x, y int) {
+	x = sum * 4 / 9
+	y = sum - x
+	return
+}
+
 func getLanguage() (string, string, string, bool) {
 	return "Go", "C++", "Python", true
 }
@@ -54,4 +64,12 @@ func main() {
 	}
 	result = executeOperation(2, 3, multiply)
 	fmt.Println("Result of multiplication using function variable:", result)
+
+	fmt.Println("Swapping 'Hello' and 'World': ")
+	x, y := swap("Hello", "World")
+	fmt.Println("x:", x, "y:", y)
+
+	fmt.Println("Splitting 100 into two parts: ")
+	num1, num2 := splitNumber(100)
+	fmt.Println("x:", num1, "y:", num2)	
 }
