@@ -78,6 +78,9 @@ func main() {
 	for i := 0; i < 5; i++ {
 		numChan <- rand.Intn(100)
 	}
+	// it sends the broadcast signal to all the goroutines that are waiting on the channel,
+	// and they will all receive the same value from the channel.
+	// This is useful when we want to signal multiple goroutines to start or stop doing something at the same time.
 	close(numChan) // close the channel to signal that no more values will be sent
 
 	result := make(chan int)
@@ -101,24 +104,24 @@ func main() {
 	// bufferedChan <- 4 // this will block until there is space in the channel
 
 	/*
-	emailChannel := make(chan string, 100) // create a buffered channel with a capacity of 2
-	emailDone := make(chan bool)
-	go emailSender(emailChannel, emailDone) // start a goroutine to send emails from the channel
+		emailChannel := make(chan string, 100) // create a buffered channel with a capacity of 2
+		emailDone := make(chan bool)
+		go emailSender(emailChannel, emailDone) // start a goroutine to send emails from the channel
 
-	for i := 1; i <= 100; i++ {
-		email := fmt.Sprintf("%d@gmail.com", i)
-		emailChannel <- email // send email addresses to the channel
-		fmt.Println("Sent email to channel:", email)
-	}
-	// this is important to close the channel after we are done sending values to it,
-	// otherwise the emailSender goroutine will be stuck waiting for more values to be sent to the channel and will never finish
-	close(emailChannel) // close the channel to signal that no more emails will be sent
+		for i := 1; i <= 100; i++ {
+			email := fmt.Sprintf("%d@gmail.com", i)
+			emailChannel <- email // send email addresses to the channel
+			fmt.Println("Sent email to channel:", email)
+		}
+		// this is important to close the channel after we are done sending values to it,
+		// otherwise the emailSender goroutine will be stuck waiting for more values to be sent to the channel and will never finish
+		close(emailChannel) // close the channel to signal that no more emails will be sent
 
-	// fmt.Println("Email channel is full, sending another value will block...")
-	// no block here because we buffered channel has a capacity of 2 and we have only sent 2 values to it, so there is still space in the channel
-	// fmt.Println("Email channel contents:", <-emailChannel, <-emailChannel) // receive values from the channel
-	// fmt.Println("Email channel contents:", <-emailChannel) // receive value from the channel
-	<-emailDone // wait for the emailSender goroutine to finish
+		// fmt.Println("Email channel is full, sending another value will block...")
+		// no block here because we buffered channel has a capacity of 2 and we have only sent 2 values to it, so there is still space in the channel
+		// fmt.Println("Email channel contents:", <-emailChannel, <-emailChannel) // receive values from the channel
+		// fmt.Println("Email channel contents:", <-emailChannel) // receive value from the channel
+		<-emailDone // wait for the emailSender goroutine to finish
 	*/
 	chan1 := make(chan int)
 	chan2 := make(chan string)
@@ -142,8 +145,26 @@ func main() {
 		}
 	}
 
-}
+	// time.Tick example
+	// Tick, After, and Timer are all related to time-based events in Go. They are used to schedule actions to occur after a certain duration or at regular intervals.
+	// time.Tick creates a channel that will send the current time on the channel after every specified duration. It is useful for creating periodic events.
+	tick := time.Tick(1 * time.Second)  // create a ticker that ticks every second
+	boom := time.After(5 * time.Second) // create a timer that will send a signal after 5 seconds
 
+	for {
+		select {
+		case <-tick:
+			fmt.Println("Tick")
+		case <-boom:
+			fmt.Println("Boom!")
+			return
+		default:
+			fmt.Println("    .")
+			time.Sleep(50 * time.Millisecond)
+		}
+	}
+
+}
 
 // Go has built-in race detection that can help identify race conditions in your code. You can run your Go program with the -race flag to enable race detection. For example:
 // go run -race your_program.go
@@ -304,7 +325,6 @@ func main() {
 // Explanation:
 // Each defer captures the current value of i at the time it is called.
 // When the loop finishes, the deferred calls are executed in reverse order, printing 2, then 1, then 0.
-
 
 // 👉 defer + panic safety
 // func main() {
