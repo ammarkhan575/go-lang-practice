@@ -3,15 +3,48 @@ package main
 import (
 	"fmt"
 	"sync"
+	"time"
 )
 
 type post struct {
 	views int
+	mu    sync.Mutex
+}
+
+/**
+Without mutex
+type Counter struct {
+	v map[string]int
+}
+
+func (c *Counter) Inc(key string) {
+	c.v[key]++
+}
+
+func (c *Counter) Value(key string) int {
+	return c.v[key]
+}
+**/
+
+type SafeCounter struct {
+	v  map[string]int
 	mu sync.Mutex
 }
 
+func (c *SafeCounter) Inc(key string) {
+	c.mu.Lock()
+	c.v[key]++
+	c.mu.Unlock()
+}
+
+func (c *SafeCounter) Value(key string) int {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	return c.v[key]
+}
+
 func (p *post) increaseView(wg *sync.WaitGroup) {
-	defer func () {
+	defer func() {
 		p.mu.Unlock()
 		wg.Done()
 	}()
@@ -38,4 +71,21 @@ func main() {
 	// wait untill all goroutine completes
 	wg.Wait()
 	fmt.Println(post1.views, "post1 views")
+
+	// Example 1:
+	// without mutex
+	// c1 := Counter{v: map[string]int{}}
+	// for i := 0; i < 1000; i++ {
+	// 	go c1.Inc("key1")
+	// }
+	// fmt.Println(c1.Value("key1")) // Output: 2
+
+	// with mutex
+	c2 := SafeCounter{v: map[string]int{}} // SafeCounter{v: make(map[string]int)} --- IGNORE ---
+	for i := 0; i < 1000; i++ {
+		go c2.Inc("key1")
+	}
+	time.Sleep(1 * time.Second) // wait for all goroutines to finish, this is not a good approach but we can use it for simplicity, in real world we should use sync.WaitGroup to wait for all goroutines to finish
+	// best approach is to use sync.WaitGroup to wait for all goroutines to finish, but for simplicity we can use time.Sleep here
+	fmt.Println(c2.Value("key1")) //
 }
