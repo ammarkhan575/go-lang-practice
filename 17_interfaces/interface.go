@@ -69,6 +69,16 @@ func (t T) M() {
 	fmt.Println(t.S)
 }
 
+type User struct {
+	Name string
+	Age int
+}
+
+// it will be called when we try to print the User struct using fmt.Println() or any other function that tries to convert the User struct to a string.
+func (u User) String() string {
+	return fmt.Sprintf("%v (%v years old)", u.Name, u.Age)
+}
+
 // any alias for interface{} is also an empty interface, and can hold any value.
 type any interface{}
 
@@ -118,6 +128,13 @@ func main() {
 
 	// u := z.(float64) // type assertion without check for wrong type, this will panic
 	// fmt.Println(u)
+	// Example 3
+	fmt.Println("This is an example of stringer interface implementation")
+	user1 := User{Name: "Alice", Age: 30}
+	// this looks for stringer interface implementation for the User type, if it finds it, 
+	// it will call the String() method to get the string representation of the User struct, 
+	// otherwise it will print the default struct representation
+	fmt.Println(user1)
 }
 
 type MyFloat float64
