@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 // An interface in Go is a type that defines a set of method signatures.
 // A type implements an interface by implementing all the methods declared in the interface.
@@ -44,10 +47,66 @@ func (p paypal) pay(amount float32) {
 }
 
 
+/**
+   Interface example
+**/
+
+type Abser interface {
+	Abs() float64
+}
+
+// zero value of an interface is nil, and a nil interface holds no value and has no type.
+type I interface {
+	M()
+}
+
+type T struct {
+	S string
+}
+// This method means type T implements the interface I because it has the method M() defined on it. 
+// The method M() simply prints the string S contained in the struct T.
+func (t T) M() {
+	fmt.Println(t.S)
+}
+
 func main() {
 	// razorpayGateway := razorpay{}
 	// stripeGateway := stripe{}
 	p := payment{gateway: razorpay{}}
 	p.makePayment(100.0)
+
+	// float interface example
+	var a Abser
+	f := MyFloat(-math.Sqrt2)
+	v := Vertex{3, 4}
+
+
+	// a can hold any value that implements the Abser interface
+	// here we are using & v because the Abs method is defined on the pointer receiver of Vertex, so we need to pass a pointer to Vertex to satisfy the Abser interface
+	a = &v  // a Vertex implements Abser
+	fmt.Println(a.Abs())
+	// here we are not using &f because the Abs method is defined on the value receiver of MyFloat, so we can pass a value of MyFloat to satisfy the Abser interface
+	a = f  // a MyFloat implements Abser
+	fmt.Println(a.Abs())
+
+	var i I = T{"Hello"}
+	i.M()
 	
+}
+
+type MyFloat float64
+
+func (f MyFloat) Abs() float64 {
+	if f < 0 {
+		return float64(-f)
+	}
+	return float64(f)
+}
+
+type Vertex struct {
+	X, Y float64
+}
+
+func (v *Vertex) Abs() float64 {
+	return math.Sqrt(v.X*v.X + v.Y*v.Y)
 }
