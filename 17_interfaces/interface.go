@@ -69,6 +69,9 @@ func (t T) M() {
 	fmt.Println(t.S)
 }
 
+// any alias for interface{} is also an empty interface, and can hold any value.
+type any interface{}
+
 func main() {
 	// razorpayGateway := razorpay{}
 	// stripeGateway := stripe{}
@@ -91,6 +94,16 @@ func main() {
 
 	var i I = T{"Hello"}
 	i.M()
+
+	// Example 1
+	var x interface{}
+	describe(x)
+
+	x = 42
+	describe(i)
+
+	x = "hello"
+	describe(x)
 	
 }
 
@@ -109,4 +122,8 @@ type Vertex struct {
 
 func (v *Vertex) Abs() float64 {
 	return math.Sqrt(v.X*v.X + v.Y*v.Y)
+}
+
+func describe(i interface{}) {
+	fmt.Printf("(%v, %T)\n", i, i)
 }
