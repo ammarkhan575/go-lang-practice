@@ -105,6 +105,19 @@ func main() {
 	x = "hello"
 	describe(x)
 	
+	// Example 2
+	var z interface{} = "hello"
+	s := z.(string) // type assertion to convert interface{} to string
+	fmt.Println(s)
+
+	s, ok := z.(string) // type assertion with check
+	fmt.Println(s, ok)
+
+	u, ok := z.(float64) // type assertion with check for wrong type
+	fmt.Println(u, ok)
+
+	// u := z.(float64) // type assertion without check for wrong type, this will panic
+	// fmt.Println(u)
 }
 
 type MyFloat float64
