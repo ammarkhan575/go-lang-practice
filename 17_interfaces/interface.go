@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math"
+	"time"
 )
 
 // An interface in Go is a type that defines a set of method signatures.
@@ -82,6 +83,29 @@ func (u User) String() string {
 // any alias for interface{} is also an empty interface, and can hold any value.
 type any interface{}
 
+
+type MyError struct {
+	When time.Time
+	What string
+}
+
+func (e *MyError) Error() string {
+	return fmt.Sprintf("at %v, %s", e.When, e.What)
+}
+
+// error is another interface just like fmt.Stringer, 
+// it is a built-in interface in Go that is used to represent errors.
+func run() error  {
+	return &MyError{
+		time.Now(), 
+		"it didn't work",
+	}
+}
+
+// consumer should define an interface and producer should implement that interface, 
+// this way we can achieve loose coupling between the consumer and producer, 
+// and we can easily swap out the producer without changing the consumer code.
+
 func main() {
 	// razorpayGateway := razorpay{}
 	// stripeGateway := stripe{}
@@ -128,6 +152,7 @@ func main() {
 
 	// u := z.(float64) // type assertion without check for wrong type, this will panic
 	// fmt.Println(u)
+
 	// Example 3
 	fmt.Println("This is an example of stringer interface implementation")
 	user1 := User{Name: "Alice", Age: 30}
@@ -135,6 +160,12 @@ func main() {
 	// it will call the String() method to get the string representation of the User struct, 
 	// otherwise it will print the default struct representation
 	fmt.Println(user1)
+
+	// Example 4
+	if err := run(); err != nil {
+		fmt.Println(err)
+	}
+
 }
 
 type MyFloat float64
